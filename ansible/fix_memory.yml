@@ -1,0 +1,33 @@
+---
+- name: Fix Service Memory Limit
+  hosts: localhost
+  connection: local
+  vars:
+    service_name: "online-store"
+    # هذه القيم سيتم تمريرها من n8n عبر -e
+    new_memory_limit: "0.50Gi"
+    namespace: "default"
+
+  tasks:
+    - name: Update memory limit in Deployment
+      kubernetes.core.k8s:
+        state: patched
+        kind: Deployment
+        name: "{{ service_name }}"
+        namespace: "{{ namespace }}"
+        definition:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: "{{ service_name }}"
+                    resources:
+                      limits:
+                        memory: "{{ new_memory_limit }}"
+                      requests:
+                        memory: "{{ new_memory_limit }}"
+      register: patch_result
+
+    - name: Report status
+      debug:
+        msg: "Memory updated successfully to {{ new_memory_limit }}"

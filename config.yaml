@@ -1,0 +1,9 @@
+# config.yaml
+optimization:
+  min_memory: 0.5
+  max_memory: 4.0
+  safety_margin: 1.2  # زيادة 20% كأمان فوق الاستخدام الفعلي
+  hpa_min_replicas: 2
+  hpa_max_replicas: 8
+  replica_threshold: 0.3  
+  cpu_target_percent: 60

@@ -1,6 +1,6 @@
 import subprocess
 import math
-
+from pricing_engine import calculate_optimized_cost
 
 DEPLOYMENT_NAME = "online-store"
 NAMESPACE = "default"
@@ -102,16 +102,16 @@ def recommend_needed_replicas(current_replicas, total_cpu_millicores):
 
 
 def calculate_cost(current_replicas, needed_replicas):
-    current_cost = current_replicas * COST_PER_REPLICA_PER_HOUR
-    optimized_cost = needed_replicas * COST_PER_REPLICA_PER_HOUR
+    # هنا سنفترض ميموري ثابتة للريبلكا (مثلاً 0.5 جيجا) لحين دمج الميموري
+    current_cost = calculate_optimized_cost(current_replicas, current_replicas * 0.5)
+    optimized_cost = calculate_optimized_cost(needed_replicas, needed_replicas * 0.5)
     saving = current_cost - optimized_cost
 
-    if current_cost == 0:
-        saving_percent = 0
-    else:
-        saving_percent = (saving / current_cost) * 100
+    # حفظ الـ Log باستخدام ملفك الجديد
+    from logger import save_log
+    save_log("online-store", current_replicas, needed_replicas, saving)
 
-    return current_cost, optimized_cost, saving, saving_percent
+    return current_cost, optimized_cost, saving
 
 
 def main():
