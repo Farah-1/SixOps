@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.ipynb_checkpoints/
+.DS_Store
+*.log
+
+# large/generated files
+*.tar
+*.zip
+
+# n8n local data
+.n8n/

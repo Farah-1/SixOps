@@ -1,0 +1,17 @@
+---
+- name: Apply HPA for Online Store
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Apply HPA manifest
+      command: kubectl apply -f ../kubernetes/hpa.yaml
+
+    - name: Show HPA status
+      command: kubectl get hpa online-store-hpa
+      register: hpa_output
+
+    - name: Print HPA status
+      debug:
+        var: hpa_output.stdout_lines
