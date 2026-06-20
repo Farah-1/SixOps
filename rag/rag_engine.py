@@ -1,3 +1,4 @@
+import os
 from google import genai
 import time
 
@@ -19,15 +20,25 @@ def generate_alert_message(current, recommended):
     """
     
     max_retries = 10
+    last_error = None
     for attempt in range(1, max_retries + 1):
         try:
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model="gemini-1.5-flash",
                 contents=prompt,
             )
             return response.text
+
         except Exception as e:
-            print(f"محاولة {attempt}/{max_retries} فشلت بسبب ضغط السيرفر...")
+            last_error = str(e)
+            print(last_error)
+
+            print(f"محاولة {attempt}/{max_retries} فشلت بسبب خطأ مؤقت...")
+
+            if "401" in last_error or "UNAUTHENTICATED" in last_error:
+                return "❌ خطأ API KEY: تحقق من Google API Key"
+
             if attempt == max_retries:
-                return f"تعذر توليد التقرير بعد 10 محاولات. الخطأ الأخير: {e}"
-            time.sleep(5)  # انتظار 5 ثواني قبل المحاولة التالية
+                return f"فشل بعد 10 محاولات: {last_error}"
+
+            time.sleep(5)

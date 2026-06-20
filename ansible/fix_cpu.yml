@@ -1,0 +1,34 @@
+---
+- name: Fix Service CPU Request
+  hosts: localhost
+  connection: local
+
+  vars:
+    service_name: "online-store"
+    new_cpu_request: "500m"
+    namespace: "default"
+
+  tasks:
+    - name: Update CPU request in Deployment
+      kubernetes.core.k8s:
+        state: patched
+        kubeconfig: "{{ lookup('env', 'HOME') }}/.kube/config"
+        kind: Deployment
+        name: "{{ service_name }}"
+        namespace: "{{ namespace }}"
+        definition:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: "{{ service_name }}"
+                    resources:
+                      requests:
+                        cpu: "{{ new_cpu_request }}"
+                      limits:
+                        cpu: "{{ new_cpu_request }}"
+      register: patch_result
+
+    - name: Report status
+      debug:
+        msg: "CPU updated successfully to {{ new_cpu_request }}"

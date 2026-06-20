@@ -11,3 +11,7 @@ def calculate_optimized_cost(replicas,  mem_usage_gb):
     cost_replicas = replicas * PRICES["pod_unit_hour"]
     cost_mem = mem_usage_gb * PRICES["mem_per_gb_hour"]
     return cost_replicas + cost_mem
+
+def calculate_cpu_cost(cpu_millicores):
+    cpu_cores = cpu_millicores / 1000
+    return cpu_cores * PRICES["cpu_per_core_hour"]

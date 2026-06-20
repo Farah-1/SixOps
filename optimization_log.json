@@ -12,3 +12,55 @@
     "cost_impact": 0.575,
     "alert_message": "تنبيه تحسين موارد:\nالهدف: تعزيز أداء واستقرار التطبيق بتوفير موارد كافية لكل نسخة، مع كفاءة التكلفة.\nالتغيير: زيادة الميموري لكل ريبلكا من 0.17Gi إلى 0.50Gi، وتقليل الريبلكا من 6 إلى 5.\nالنتيجة: استقرار أفضل وأداء محسّن لكل نسخة، وتحسين الاستخدام الكلي للموارد.\nهل توافق على التطبيق؟"
 }
+{
+    "timestamp": "2026-06-21T00:07:44.095242",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2
+    },
+    "cost_impact": 0.575,
+    "alert_message": "تعذر توليد التقرير بعد 10 محاولات. الخطأ الأخير: 401 UNAUTHENTICATED. {'error': {'code': 401, 'message': 'Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.', 'status': 'UNAUTHENTICATED', 'details': [{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'ACCESS_TOKEN_TYPE_UNSUPPORTED', 'metadata': {'service': 'generativelanguage.googleapis.com', 'method': 'google.ai.generativelanguage.v1beta.GenerativeService.GenerateContent'}}]}}"
+}
+{
+    "timestamp": "2026-06-21T00:07:44.095401",
+    "service_name": "online-store",
+    "cpu": {
+        "actual_usage_millicores": 0.0,
+        "current_request_millicores": 0.0,
+        "recommended_request_millicores": 250
+    },
+    "cpu_cost_saving": -0.625,
+    "cpu_saving_percentage": 0,
+    "alert_message": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 0.00m\n    Actual CPU Usage: 0.00m\n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.00\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.62\n\n    Estimated Savings: 0.00%\n    "
+}
+{
+    "timestamp": "2026-06-21T00:21:45.660886",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2
+    },
+    "cost_impact": 0.575,
+    "alert_message": "❌ خطأ API KEY: تحقق من Google API Key"
+}
+{
+    "timestamp": "2026-06-21T00:21:45.661105",
+    "service_name": "online-store",
+    "cpu": {
+        "actual_usage_millicores": 0.0,
+        "current_request_millicores": 0.0,
+        "recommended_request_millicores": 250
+    },
+    "cpu_cost_saving": -0.625,
+    "cpu_saving_percentage": 0,
+    "alert_message": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 0.00m\n    Actual CPU Usage: 0.00m\n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.00\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.62\n\n    Estimated Savings: 0.00%\n    "
+}

@@ -7,3 +7,8 @@ optimization:
   hpa_max_replicas: 8
   replica_threshold: 0.3  
   cpu_target_percent: 60
+
+  min_cpu_millicores: 250
+  max_cpu_millicores: 3000
+  cpu_safety_margin: 2
+  cpu_optimization_threshold: 0.5
