@@ -64,3 +64,87 @@
     "cpu_saving_percentage": 0,
     "alert_message": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 0.00m\n    Actual CPU Usage: 0.00m\n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.00\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.62\n\n    Estimated Savings: 0.00%\n    "
 }
+{
+    "timestamp": "2026-06-22T12:49:47.432908",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2
+    },
+    "cpu": {
+        "current": 0.0,
+        "recommended": 250
+    },
+    "cost_impact": -0.050000000000000044,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 0.00m\n   \n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.00\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.62\n\n    Estimated Savings: 0.00%\n    "
+    }
+}
+{
+    "timestamp": "2026-06-22T13:07:41.075010",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0556640625,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2
+    },
+    "cpu": {
+        "current": 0.0,
+        "recommended": 250
+    },
+    "cost_impact": -0.050000000000000044,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 0.00m\n   \n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.00\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.62\n\n    Estimated Savings: 0.00%\n    "
+    }
+}
+{
+    "timestamp": "2026-06-22T14:30:07.595078",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0546875,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2
+    },
+    "cpu": {
+        "current": 200.0,
+        "recommended": 250
+    },
+    "cost_impact": 0.44999999999999996,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 200.00m\n   \n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.50\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.12\n\n    Estimated Savings: -25.00%\n    "
+    }
+}
+{
+    "timestamp": "2026-06-23T01:34:09.433923",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.052734375,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2
+    },
+    "cpu": {
+        "current": 200.0,
+        "recommended": 250
+    },
+    "cost_impact": 0.44999999999999996,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 200.00m\n   \n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.50\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.12\n\n    Estimated Savings: -25.00%\n    "
+    }
+}

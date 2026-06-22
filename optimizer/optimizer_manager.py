@@ -5,7 +5,7 @@ from optimizer.memory_optimizer import analyze_memory_and_cost
 from optimizer.replica_cost_recommender import get_current_replicas
 from rag.rag_engine import generate_alert_message
 from optimizer.cpu_optimizer import analyze_cpu_and_cost
-from logger import save_cpu_log
+
 
 def get_prometheus_data(query):
     url = "http://localhost:9090/api/v1/query"
@@ -39,6 +39,34 @@ def get_actual_cpu_usage():
     '''
     return get_prometheus_data(query)
 
+import subprocess
+
+
+def get_pod_metrics():
+    try:
+        output = subprocess.check_output(
+            ["kubectl", "top", "pods", "--no-headers"]
+        ).decode()
+
+        total_cpu = 0
+        total_mem = 0
+
+        for line in output.splitlines():
+            if "online-store" in line:
+                parts = line.split()
+
+                cpu = parts[1]
+                mem = parts[2]
+
+                total_cpu += int(cpu.replace("m", ""))
+                total_mem += int(mem.replace("Mi", ""))
+
+        return total_cpu, total_mem
+
+    except Exception as e:
+        print(f"Metrics error: {e}")
+        return 0, 0
+
 def get_current_cpu_request():
     query = '''
     sum(
@@ -50,6 +78,14 @@ def get_current_cpu_request():
     '''
     return get_prometheus_data(query)
 
+def calculate_total_cost_impact(memory_cost, cpu_cost):
+    """
+    Returns the total cost impact from memory and CPU optimizations.
+    Positive value = savings.
+    Negative value = additional cost.
+    """
+    return memory_cost + cpu_cost
+
 def main():
     # 1. تحميل الإعدادات
     with open("config.yaml", "r") as f:
@@ -58,13 +94,14 @@ def main():
     opt_cfg = cfg.get('optimization', {})
 
     # 2. جلب البيانات من بروميثيوس
-    actual_mem_bytes = get_prometheus_data('sum(container_memory_working_set_bytes{container="online-store"})')
-    actual_mem_gb = actual_mem_bytes / (1024**3)
-    
+    #actual_mem_bytes = get_prometheus_data('sum(container_memory_working_set_bytes{container="online-store"})')
+    #actual_mem_gb = actual_mem_bytes / (1024**3)
+    actual_cpu, actual_mem_mi = get_pod_metrics()
+    actual_mem_gb = actual_mem_mi / 1024
     current_replicas = get_current_replicas()
 
 
-    actual_cpu = get_actual_cpu_usage()
+    #actual_cpu = get_actual_cpu_usage()
     current_cpu_request = get_current_cpu_request()
 
     # 3. التحليل باستخدام قيم الـ config
@@ -72,8 +109,8 @@ def main():
     threshold = opt_cfg.get('replica_threshold', 0.3)
     min_replicas = opt_cfg.get('hpa_min_replicas', 2)
     
-    recommended_mem, mem_cost = analyze_memory_and_cost(actual_mem_gb, limit)
-    recommended_replicas = calculate_replica_recommendation(current_replicas, actual_mem_gb, limit, threshold, min_replicas)
+    (recommended_mem, mem_cost) = analyze_memory_and_cost(actual_mem_gb, limit)
+    recommended_replicas = (calculate_replica_recommendation(current_replicas, actual_mem_gb, limit, threshold, min_replicas))
 
     (
         recommended_cpu,
@@ -86,10 +123,15 @@ def main():
         current_cpu_request
     )
 
+    total_cost_impact = (calculate_total_cost_impact(
+        mem_cost,
+        cpu_saving
+    ))
+
     # 6. Build alert messages FIRST (fix critical bug)
     # 5. الحفظ
     
-    cost_diff = mem_cost # تأكدي أن الدالة عندك تعيد القيمة الحقيقية
+    #cost_diff = mem_cost # تأكدي أن الدالة عندك تعيد القيمة الحقيقية
     current_stats = {"mem": f"{actual_mem_gb:.2f}Gi", "replicas": current_replicas}
     memory_stats = {
         "mem": f"{actual_mem_gb:.2f}Gi",
@@ -111,7 +153,7 @@ def main():
     CPU Optimization Recommendation
 
     Current CPU Request: {current_cpu_request:.2f}m
-    Actual CPU Usage: {actual_cpu:.2f}m
+   
     Recommended CPU: {recommended_cpu:.2f}m
     Current CPU Cost: ${current_cpu_cost:.2f}
 
@@ -124,39 +166,85 @@ def main():
 
 
     # 4. الحفظ في الـ JSON (تأكدي من تمرير alert_text هنا)
-    save_log("online-store", actual_mem_gb, recommended_mem, current_replicas, recommended_replicas, mem_cost, alert_text)
-
-
-    save_cpu_log(
-        "online-store",
-        actual_cpu,
-        current_cpu_request,
-        recommended_cpu,
-        cpu_saving,
-        cpu_saving_percent,
-        cpu_message
-    )
+    #save_log("online-store", actual_mem_gb, recommended_mem, current_replicas, recommended_replicas, mem_cost, alert_text)
 
 
 
 
     # 4. طباعة التقرير الموحد
     print(f"--- التقرير الموحد ---")
-    print(f"الريبلكا الحالية : {int(current_replicas)}")
-    print(f"الميموري الفعلي  : {actual_mem_gb:.2f} Gi")
-    print(f"توصية الميموري    : {recommended_mem:.2f} Gi")
-    print(f"توصية الريبلكا    : {recommended_replicas}")
+    print(
+        f"الريبلكا الحالية : "
+        f"{int(current_replicas)}"
+    )
 
-    print(f"CPU Usage : {actual_cpu:.2f}m")
-    print(f"CPU Request : {current_cpu_request:.2f}m")
-    print(f"Recommended CPU : {recommended_cpu:.2f}m")
-    print(f"CPU Saving : ${cpu_saving:.2f}")    
+    print(
+        f"الميموري الفعلي : "
+        f"{actual_mem_gb:.2f} Gi"
+    )
 
-    print(f"----------------------")
+    print(
+        f"توصية الميموري : "
+        f"{recommended_mem:.2f} Gi"
+    )
+
+    print(
+        f"توصية الريبلكا : "
+        f"{recommended_replicas}"
+    )
+
+    print(
+        f"CPU Usage : "
+        f"{actual_cpu:.2f}m"
+    )
+
+    print(
+        f"CPU Request : "
+        f"{current_cpu_request:.2f}m"
+    )
+
+    print(
+        f"Recommended CPU : "
+        f"{recommended_cpu:.2f}m"
+    )
+
+    print(
+        f"CPU Saving : "
+        f"${cpu_saving:.2f}"
+    )
+
+    print(
+        f"Total Cost Impact : "
+        f"${total_cost_impact:.2f}"
+    )
+
+    print("----------------------")
+
+    print(
+        f"\nتم توليد رسالة التنبيه:\n"
+        f"{alert_text}"
+    )
+
+    # Save ONE log entry
+    save_log(
+        service="online-store",
+        actual_mem=actual_mem_gb,
+        recommended_mem=recommended_mem,
+        current_replicas=current_replicas,
+        recommended_replicas=recommended_replicas,
+        cost_diff=total_cost_impact,
+        message={
+            "memory_alert": alert_text,
+            "cpu_alert": cpu_message,
+        },
+       # actual_cpu=actual_cpu,
+        current_cpu_request=current_cpu_request,
+        recommended_cpu=recommended_cpu,
+        cpu_saving=cpu_saving,
+       # cpu_saving_percent=cpu_saving_percent,
+    )
 
 
-    # 5. الطباعة الآن آمنة لأن alert_text تم تعريفه في الـ try/except
-    print(f"\nتم توليد رسالة التنبيه:\n{alert_text}")
 
 
 if __name__ == "__main__":
