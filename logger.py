@@ -1,13 +1,14 @@
 import json
 from datetime import datetime
 
-def save_log(service, actual_mem, recommended_mem, current_replicas, recommended_replicas, cost_diff, message, current_cpu_request, recommended_cpu, cpu_saving):
+def save_log(service, actual_mem, recommended_mem, current_replicas, recommended_replicas, cost_diff, message, current_cpu_request, recommended_cpu, cpu_saving, current_storage, recommended_storage, storage_saving):
     log_entry = {
         "timestamp": datetime.now().isoformat(),
         "service_name": service,
         "memory": {"actual": actual_mem, "recommended": recommended_mem},
         "replicas": {"current": current_replicas, "recommended": recommended_replicas},
         "cpu":{"current": current_cpu_request, "recommended": recommended_cpu },
+        "storage": {"current": current_storage, "recommended": recommended_storage, "saving": storage_saving},
         "cost_impact": cost_diff,
         "alert_message": message
     }

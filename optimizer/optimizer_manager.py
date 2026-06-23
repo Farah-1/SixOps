@@ -5,7 +5,7 @@ from optimizer.memory_optimizer import analyze_memory_and_cost
 from optimizer.replica_cost_recommender import get_current_replicas
 from rag.rag_engine import generate_alert_message
 from optimizer.cpu_optimizer import analyze_cpu_and_cost
-
+from optimizer.storage_optimizer import analyze_storage_and_cost
 
 def get_prometheus_data(query):
     url = "http://localhost:9090/api/v1/query"
@@ -78,13 +78,28 @@ def get_current_cpu_request():
     '''
     return get_prometheus_data(query)
 
-def calculate_total_cost_impact(memory_cost, cpu_cost):
+def get_storage_metrics():
+    capacity_query = '''
+    sum(kubelet_volume_stats_capacity_bytes{
+        persistentvolumeclaim="online-store"})'''
+    used_query = '''
+    sum(kubelet_volume_stats_used_bytes{
+        persistentvolumeclaim="online-store"})'''
+
+    capacity_bytes = get_prometheus_data(capacity_query)
+    used_bytes = get_prometheus_data(used_query)
+    capacity_gb = capacity_bytes / (1024**3)
+    used_gb = used_bytes / (1024**3)
+
+    return used_gb, capacity_gb
+
+def calculate_total_cost_impact(memory_cost, cpu_cost, storage_cost):
     """
     Returns the total cost impact from memory and CPU optimizations.
     Positive value = savings.
     Negative value = additional cost.
     """
-    return memory_cost + cpu_cost
+    return memory_cost + cpu_cost + storage_cost
 
 def main():
     # 1. تحميل الإعدادات
@@ -99,7 +114,7 @@ def main():
     actual_cpu, actual_mem_mi = get_pod_metrics()
     actual_mem_gb = actual_mem_mi / 1024
     current_replicas = get_current_replicas()
-
+    actual_storage_gb, allocated_storage_gb = get_storage_metrics()
 
     #actual_cpu = get_actual_cpu_usage()
     current_cpu_request = get_current_cpu_request()
@@ -122,15 +137,25 @@ def main():
         actual_cpu,
         current_cpu_request
     )
+    (
+    recommended_storage,
+    current_storage_cost,
+    optimized_storage_cost,
+    storage_saving,
+    storage_saving_percent
+    ) = analyze_storage_and_cost(
+    actual_storage_gb,
+    allocated_storage_gb
+    )
 
     total_cost_impact = (calculate_total_cost_impact(
         mem_cost,
-        cpu_saving
+        cpu_saving,
+        storage_saving,
     ))
 
     # 6. Build alert messages FIRST (fix critical bug)
     # 5. الحفظ
-    
     #cost_diff = mem_cost # تأكدي أن الدالة عندك تعيد القيمة الحقيقية
     current_stats = {"mem": f"{actual_mem_gb:.2f}Gi", "replicas": current_replicas}
     memory_stats = {
@@ -164,6 +189,17 @@ def main():
     Estimated Savings: {cpu_saving_percent:.2f}%
     """
 
+    storage_message = f"""
+    Storage Optimization Recommendation
+
+    Current Storage Allocation:{allocated_storage_gb:.2f} GB
+    Current Storage Usage: {actual_storage_gb:.2f} GB
+    Recommended Storage: {recommended_storage:.2f} GB
+    Current Storage Cost:$ {current_storage_cost:.2f}
+    Optimized Storage Cost:$ {optimized_storage_cost:.2f}
+    Expected Saving: ${storage_saving:.2f}
+    Estimated Savings: {storage_saving_percent:.2f}%
+"""
 
     # 4. الحفظ في الـ JSON (تأكدي من تمرير alert_text هنا)
     #save_log("online-store", actual_mem_gb, recommended_mem, current_replicas, recommended_replicas, mem_cost, alert_text)
@@ -218,6 +254,23 @@ def main():
         f"${total_cost_impact:.2f}"
     )
 
+    print(
+        f"Storage Used : "
+        f"{actual_storage_gb:.2f} GB"
+    )
+    print(
+        f"Storage Allocated : "
+        f"{allocated_storage_gb:.2f} GB"
+    )
+    print(
+        f"Recommended Storage : "
+        f"{recommended_storage:.2f} GB"
+    )
+    print(
+        f"Storage Saving : "
+        f"${storage_saving:.2f}"
+    )
+
     print("----------------------")
 
     print(
@@ -236,15 +289,17 @@ def main():
         message={
             "memory_alert": alert_text,
             "cpu_alert": cpu_message,
+            "storage_alert": storage_message,
         },
        # actual_cpu=actual_cpu,
         current_cpu_request=current_cpu_request,
         recommended_cpu=recommended_cpu,
         cpu_saving=cpu_saving,
        # cpu_saving_percent=cpu_saving_percent,
+       current_storage=allocated_storage_gb,
+       recommended_storage=recommended_storage,
+       storage_saving=storage_saving
     )
-
-
 
 
 if __name__ == "__main__":
