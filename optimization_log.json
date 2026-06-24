@@ -148,3 +148,138 @@
         "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 200.00m\n   \n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.50\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.12\n\n    Estimated Savings: -25.00%\n    "
     }
 }
+{
+    "timestamp": "2026-06-24T21:07:04.519500",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.1640625,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 6,
+        "recommended": 2,
+        "current_cost": 3.45,
+        "optimized_cost": 1.15,
+        "saving": 2.3000000000000003,
+        "saving_percent": 66.66666666666667
+    },
+    "cpu": {
+        "current": 0.0,
+        "recommended": 250,
+        "saving": -0.625
+    },
+    "cost_impact": 2.25,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 0.00m\n   \n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.00\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.62\n\n    Estimated Savings: 0.00%\n    ",
+        "replica_alert": "\n    Replica Optimization Recommendation\n\n    Current Replicas: 6\n\n    Recommended Replicas: 2\n\n    Current Replica Cost:\n    $3.45\n\n    Optimized Replica Cost:\n    $1.15\n\n    Expected Saving:\n    $2.30\n\n    Estimated Savings:\n    66.67%\n    "
+    }
+}
+{
+    "timestamp": "2026-06-24T21:29:03.315877",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0546875,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2,
+        "current_cost": 1.15,
+        "optimized_cost": 1.15,
+        "saving": 0.0,
+        "saving_percent": 0.0
+    },
+    "cpu": {
+        "current": 200.0,
+        "recommended": 250,
+        "saving": -0.125
+    },
+    "cost_impact": 0.44999999999999996,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 200.00m\n   \n    Recommended CPU: 250.00m\n    Current CPU Cost: $0.50\n\n    Optimized CPU Cost: $0.62\n\n    Expected Saving: $-0.12\n\n    Estimated Savings: -25.00%\n    ",
+        "replica_alert": "\n    Replica Optimization Recommendation\n\n    Current Replicas: 2\n\n    Recommended Replicas: 2\n\n    Current Replica Cost:\n    $1.15\n\n    Optimized Replica Cost:\n    $1.15\n\n    Expected Saving:\n    $0.00\n\n    Estimated Savings:\n    0.00%\n    "
+    }
+}
+{
+    "timestamp": "2026-06-24T21:33:41.536804",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0546875,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2,
+        "current_cost": 1.15,
+        "optimized_cost": 1.15,
+        "saving": 0.0,
+        "saving_percent": 0.0
+    },
+    "cpu": {
+        "current": 200.0,
+        "recommended": 50,
+        "saving": 0.375
+    },
+    "cost_impact": 0.95,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 200.00m\n   \n    Recommended CPU: 50.00m\n    Current CPU Cost: $0.50\n\n    Optimized CPU Cost: $0.12\n\n    Expected Saving: $0.38\n\n    Estimated Savings: 75.00%\n    ",
+        "replica_alert": "\n    Replica Optimization Recommendation\n\n    Current Replicas: 2\n\n    Recommended Replicas: 2\n\n    Current Replica Cost:\n    $1.15\n\n    Optimized Replica Cost:\n    $1.15\n\n    Expected Saving:\n    $0.00\n\n    Estimated Savings:\n    0.00%\n    "
+    }
+}
+{
+    "timestamp": "2026-06-24T21:40:07.233879",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0546875,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2,
+        "current_cost": 1.15,
+        "optimized_cost": 1.15,
+        "saving": 0.0,
+        "saving_percent": 0.0
+    },
+    "cpu": {
+        "current": 200.0,
+        "recommended": 50,
+        "saving": 0.375
+    },
+    "cost_impact": 0.95,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 200.00m\n   \n    Recommended CPU: 50.00m\n    Current CPU Cost: $0.50\n\n    Optimized CPU Cost: $0.12\n\n    Expected Saving: $0.38\n\n    Estimated Savings: 75.00%\n    ",
+        "replica_alert": "\n    Replica Optimization Recommendation\n\n    Current Replicas: 2\n\n    Recommended Replicas: 2\n\n    Current Replica Cost:\n    $1.15\n\n    Optimized Replica Cost:\n    $1.15\n\n    Expected Saving:\n    $0.00\n\n    Estimated Savings:\n    0.00%\n    "
+    }
+}
+{
+    "timestamp": "2026-06-24T21:42:52.913970",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0546875,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 6,
+        "recommended": 2,
+        "current_cost": 3.45,
+        "optimized_cost": 1.15,
+        "saving": 2.3000000000000003,
+        "saving_percent": 66.66666666666667
+    },
+    "cpu": {
+        "current": 600.0000000000001,
+        "recommended": 50,
+        "saving": 1.3750000000000002
+    },
+    "cost_impact": 4.25,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 600.00m\n   \n    Recommended CPU: 50.00m\n    Current CPU Cost: $1.50\n\n    Optimized CPU Cost: $0.12\n\n    Expected Saving: $1.38\n\n    Estimated Savings: 91.67%\n    ",
+        "replica_alert": "\n    Replica Optimization Recommendation\n\n    Current Replicas: 6\n\n    Recommended Replicas: 2\n\n    Current Replica Cost:\n    $3.45\n\n    Optimized Replica Cost:\n    $1.15\n\n    Expected Saving:\n    $2.30\n\n    Estimated Savings:\n    66.67%\n    "
+    }
+}

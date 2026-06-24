@@ -101,59 +101,18 @@ def recommend_needed_replicas(current_replicas, total_cpu_millicores):
     return needed
 
 
-#def calculate_cost(current_replicas, needed_replicas):
+def calculate_cost(current_replicas, needed_replicas):
     # هنا سنفترض ميموري ثابتة للريبلكا (مثلاً 0.5 جيجا) لحين دمج الميموري
-#    current_cost = calculate_optimized_cost(current_replicas, current_replicas * 0.5)
-#    optimized_cost = calculate_optimized_cost(needed_replicas, needed_replicas * 0.5)
-#    saving = current_cost - optimized_cost
+    current_cost = calculate_optimized_cost(current_replicas, current_replicas * 0.5)
+    optimized_cost = calculate_optimized_cost(needed_replicas, needed_replicas * 0.5)
+    saving = current_cost - optimized_cost
 
     # حفظ الـ Log باستخدام ملفك الجديد
-#    from logger import save_log
-#    save_log("online-store", current_replicas, needed_replicas, saving)
+    from logger import save_log
+    save_log("online-store", current_replicas, needed_replicas, saving)
 
-#    return current_cost, optimized_cost, saving
+    return current_cost, optimized_cost, saving
 
-def analyze_replica_and_cost(
-        current_replicas,
-        total_cpu_millicores,
-):
-    recommended_replicas = (
-        recommend_needed_replicas(
-            current_replicas,
-            total_cpu_millicores
-        )
-    )
-
-    current_cost = calculate_optimized_cost(
-        current_replicas,
-        current_replicas * 0.5
-    )
-
-    optimized_cost = calculate_optimized_cost(
-        recommended_replicas,
-        recommended_replicas * 0.5
-    )
-
-    saving = (
-        current_cost -
-        optimized_cost
-    )
-
-    if current_cost > 0:
-        saving_percent = (
-            saving /
-            current_cost
-        ) * 100
-    else:
-        saving_percent = 0
-
-    return (
-        recommended_replicas,
-        current_cost,
-        optimized_cost,
-        saving,
-        saving_percent
-    )
 
 def main():
     current_replicas = get_current_replicas()
@@ -165,20 +124,9 @@ def main():
     total_cpu = get_total_cpu_usage_millicores()
     needed_replicas = recommend_needed_replicas(current_replicas, total_cpu)
 
-   # current_cost, optimized_cost, saving, saving_percent = calculate_cost(
-   #     current_replicas,
-   #     needed_replicas
-   # )
-
-    (
-        needed_replicas,
-        current_cost,
-        optimized_cost,
-        saving,
-        saving_percent
-    ) = analyze_replica_and_cost(
+    current_cost, optimized_cost, saving, saving_percent = calculate_cost(
         current_replicas,
-        total_cpu
+        needed_replicas
     )
 
     print("=" * 60)

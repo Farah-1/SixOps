@@ -2,11 +2,7 @@ import yaml
 import requests
 from logger import save_log
 from optimizer.memory_optimizer import analyze_memory_and_cost
-#from optimizer.replica_cost_recommender import get_current_replicas
-from optimizer.replica_cost_recommender import (
-    get_current_replicas,
-    analyze_replica_and_cost
-)
+from optimizer.replica_cost_recommender import get_current_replicas
 from rag.rag_engine import generate_alert_message
 from optimizer.cpu_optimizer import analyze_cpu_and_cost
 
@@ -25,11 +21,11 @@ def get_prometheus_data(query):
         print(f"خطأ في الاتصال بـ Prometheus: {e}")
     return 0.0
 
-#def calculate_replica_recommendation(current_replicas, actual_mem_gb, limit, threshold, min_replicas):
-#    # نستخدم min_replicas من الـ config لضمان عدم النزول عن الحد المسموح
-#    if actual_mem_gb < (limit * threshold * current_replicas):
-#        return max(min_replicas, current_replicas - 1)
-#    return current_replicas
+def calculate_replica_recommendation(current_replicas, actual_mem_gb, limit, threshold, min_replicas):
+    # نستخدم min_replicas من الـ config لضمان عدم النزول عن الحد المسموح
+    if actual_mem_gb < (limit * threshold * current_replicas):
+        return max(min_replicas, current_replicas - 1)
+    return current_replicas
 
 def get_actual_cpu_usage():
     query = '''
@@ -82,36 +78,13 @@ def get_current_cpu_request():
     '''
     return get_prometheus_data(query)
 
-def calculate_total_cost_impact(memory_cost, cpu_cost, replica_saving):
+def calculate_total_cost_impact(memory_cost, cpu_cost):
     """
     Returns the total cost impact from memory and CPU optimizations.
     Positive value = savings.
     Negative value = additional cost.
     """
-    return memory_cost + cpu_cost + replica_saving
-
-def get_current_cpu_request_from_k8s():
-    try:
-        output = subprocess.check_output(
-            [
-                "kubectl",
-                "get",
-                "deployment",
-                "online-store",
-                "-o",
-                "jsonpath={.spec.template.spec.containers[0].resources.requests.cpu}",
-            ],
-            text=True,
-        ).strip()
-
-        if output.endswith("m"):
-            return float(output[:-1])
-
-        return float(output) * 1000
-
-    except Exception:
-        return 0.0
-
+    return memory_cost + cpu_cost
 
 def main():
     # 1. تحميل الإعدادات
@@ -129,29 +102,15 @@ def main():
 
 
     #actual_cpu = get_actual_cpu_usage()
-#    current_cpu_request = get_current_cpu_request()
     current_cpu_request = get_current_cpu_request()
-
-    if current_cpu_request == 0:
-        current_cpu_request = get_current_cpu_request_from_k8s()
 
     # 3. التحليل باستخدام قيم الـ config
     limit = opt_cfg.get('max_memory', 2.0)
-#    threshold = opt_cfg.get('replica_threshold', 0.3)
-#    min_replicas = opt_cfg.get('hpa_min_replicas', 2)
+    threshold = opt_cfg.get('replica_threshold', 0.3)
+    min_replicas = opt_cfg.get('hpa_min_replicas', 2)
     
     (recommended_mem, mem_cost) = analyze_memory_and_cost(actual_mem_gb, limit)
-   # recommended_replicas = (calculate_replica_recommendation(current_replicas, actual_mem_gb, limit, threshold, min_replicas))
-    (
-        recommended_replicas,
-        current_replica_cost,
-        optimized_replica_cost,
-        replica_saving,
-        replica_saving_percent
-    ) = analyze_replica_and_cost(
-        current_replicas,
-        actual_cpu
-    )
+    recommended_replicas = (calculate_replica_recommendation(current_replicas, actual_mem_gb, limit, threshold, min_replicas))
 
     (
         recommended_cpu,
@@ -166,8 +125,7 @@ def main():
 
     total_cost_impact = (calculate_total_cost_impact(
         mem_cost,
-        cpu_saving,
-	replica_saving
+        cpu_saving
     ))
 
     # 6. Build alert messages FIRST (fix critical bug)
@@ -207,27 +165,6 @@ def main():
     """
 
 
-    replica_message = f"""
-    Replica Optimization Recommendation
-
-    Current Replicas: {current_replicas}
-
-    Recommended Replicas: {recommended_replicas}
-
-    Current Replica Cost:
-    ${current_replica_cost:.2f}
-
-    Optimized Replica Cost:
-    ${optimized_replica_cost:.2f}
-
-    Expected Saving:
-    ${replica_saving:.2f}
-
-    Estimated Savings:
-    {replica_saving_percent:.2f}%
-    """
-
-
     # 4. الحفظ في الـ JSON (تأكدي من تمرير alert_text هنا)
     #save_log("online-store", actual_mem_gb, recommended_mem, current_replicas, recommended_replicas, mem_cost, alert_text)
 
@@ -256,38 +193,6 @@ def main():
         f"{recommended_replicas}"
     )
 
-    print(".......................................................")
-
-    print(
-        f"Current Replicas : "
-        f"{current_replicas}"
-    )
-
-    print(
-        f"Recommended Replicas : "
-        f"{recommended_replicas}"
-    )
-
-    print(
-        f"Replica Current Cost : "
-        f"${current_replica_cost:.2f}"
-    )
-
-    print(
-        f"Replica Optimized Cost : "
-        f"${optimized_replica_cost:.2f}"
-    )
-
-    print(
-        f"Replica Saving : "
-        f"${replica_saving:.2f}"
-    )
-
-#    print(
-#        f"Replica Saving Percent : "
-#        f"{replica_saving_percent:.2f}%"
-#    )
-
     print(
         f"CPU Usage : "
         f"{actual_cpu:.2f}m"
@@ -303,21 +208,10 @@ def main():
         f"{recommended_cpu:.2f}m"
     )
 
-    if cpu_saving >= 0:
-        print(
-            f"CPU Saving : "
-            f"${cpu_saving:.2f}"
-        )
-    else:
-        print(
-            f"Additional CPU Cost : "
-            f"${abs(cpu_saving):.2f}"
-        )
-
-#    print(
-#        f"CPU Saving : "
-#        f"${cpu_saving:.2f}"
-#    )
+    print(
+        f"CPU Saving : "
+        f"${cpu_saving:.2f}"
+    )
 
     print(
         f"Total Cost Impact : "
@@ -342,18 +236,12 @@ def main():
         message={
             "memory_alert": alert_text,
             "cpu_alert": cpu_message,
-	    "replica_alert": replica_message,
         },
        # actual_cpu=actual_cpu,
         current_cpu_request=current_cpu_request,
         recommended_cpu=recommended_cpu,
         cpu_saving=cpu_saving,
        # cpu_saving_percent=cpu_saving_percent,
-
-        current_replica_cost=current_replica_cost,
-        optimized_replica_cost=optimized_replica_cost,
-        replica_saving=replica_saving,
-        replica_saving_percent=replica_saving_percent,
     )
 
 
