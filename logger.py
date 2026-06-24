@@ -31,6 +31,9 @@ def save_log(
         optimized_replica_cost=0,
         replica_saving=0,
         replica_saving_percent=0,
+        current_storage=0,
+        recommended_storage=0,
+        storage_saving=0
 ):
     log_entry = {
         "timestamp": datetime.now().isoformat(),
@@ -54,6 +57,13 @@ def save_log(
             "current": current_cpu_request,
             "recommended": recommended_cpu,
             "saving": cpu_saving
+        },
+
+
+        "storage": {
+            "current": current_storage,
+            "recommended": recommended_storage,
+            "saving": storage_saving
         },
 
         "cost_impact": cost_diff,

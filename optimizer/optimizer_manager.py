@@ -7,6 +7,7 @@ from optimizer.replica_cost_recommender import (
     get_current_replicas,
     analyze_replica_and_cost
 )
+from optimizer.storage_optimizer import analyze_storage_and_cost
 from rag.rag_engine import generate_alert_message
 from optimizer.cpu_optimizer import analyze_cpu_and_cost
 
@@ -82,13 +83,47 @@ def get_current_cpu_request():
     '''
     return get_prometheus_data(query)
 
-def calculate_total_cost_impact(memory_cost, cpu_cost, replica_saving):
+def get_storage_metrics():
+    capacity_query = '''
+    sum(
+        kubelet_volume_stats_capacity_bytes{
+            persistentvolumeclaim="online-store"
+        }
+    )
+    '''
+
+    used_query = '''
+    sum(
+        kubelet_volume_stats_used_bytes{
+            persistentvolumeclaim="online-store"
+        }
+    )
+    '''
+
+    capacity_bytes = get_prometheus_data(
+        capacity_query
+    )
+
+    used_bytes = get_prometheus_data(
+        used_query
+    )
+
+    capacity_gb = capacity_bytes / (1024 ** 3)
+    used_gb = used_bytes / (1024 ** 3)
+
+    return (
+        used_gb,
+        capacity_gb
+    )
+
+
+def calculate_total_cost_impact(memory_cost, cpu_cost, replica_saving, storage_saving):
     """
     Returns the total cost impact from memory and CPU optimizations.
     Positive value = savings.
     Negative value = additional cost.
     """
-    return memory_cost + cpu_cost + replica_saving
+    return memory_cost + cpu_cost + replica_saving + storage_saving
 
 def get_current_cpu_request_from_k8s():
     try:
@@ -127,6 +162,9 @@ def main():
     actual_mem_gb = actual_mem_mi / 1024
     current_replicas = get_current_replicas()
 
+    actual_storage_gb, current_storage_gb = (
+        get_storage_metrics()
+    )
 
     #actual_cpu = get_actual_cpu_usage()
 #    current_cpu_request = get_current_cpu_request()
@@ -140,8 +178,21 @@ def main():
 #    threshold = opt_cfg.get('replica_threshold', 0.3)
 #    min_replicas = opt_cfg.get('hpa_min_replicas', 2)
     
-    (recommended_mem, mem_cost) = analyze_memory_and_cost(actual_mem_gb, limit)
+#    (recommended_mem, mem_cost) = analyze_memory_and_cost(actual_mem_gb, limit)
    # recommended_replicas = (calculate_replica_recommendation(current_replicas, actual_mem_gb, limit, threshold, min_replicas))
+
+    (
+        recommended_mem,
+        current_memory_cost,
+        optimized_memory_cost,
+        memory_saving,
+        memory_saving_percent
+    ) = analyze_memory_and_cost(
+        actual_mem_gb,
+        limit
+    )
+
+
     (
         recommended_replicas,
         current_replica_cost,
@@ -164,10 +215,25 @@ def main():
         current_cpu_request
     )
 
+
+    (
+        recommended_storage,
+        current_storage_cost,
+        optimized_storage_cost,
+        storage_saving,
+        storage_saving_percent
+    ) = analyze_storage_and_cost(
+        actual_storage_gb,
+        current_storage_gb
+    )
+
+
+ # mem_cost
     total_cost_impact = (calculate_total_cost_impact(
-        mem_cost,
+	memory_saving,
         cpu_saving,
-	replica_saving
+	replica_saving,
+	storage_saving
     ))
 
     # 6. Build alert messages FIRST (fix critical bug)
@@ -190,6 +256,22 @@ def main():
     except Exception as e:
         alert_text = f"Alert generation failed: {e}"
 
+
+    memory_message = f"""
+    Memory Optimization Recommendation
+
+    Current Memory Usage: {actual_mem_gb:.2f} Gi
+
+    Recommended Memory: {recommended_mem:.2f} Gi
+
+    Current Memory Cost: ${current_memory_cost:.2f}
+
+    Optimized Memory Cost: ${optimized_memory_cost:.2f}
+
+    Expected Saving: ${memory_saving:.2f}
+
+    Estimated Savings: {memory_saving_percent:.2f}%
+    """
 
     cpu_message = f"""
     CPU Optimization Recommendation
@@ -228,6 +310,25 @@ def main():
     """
 
 
+    storage_message = f"""
+    Storage Optimization Recommendation
+
+    Current Storage: {current_storage_gb:.2f} Gi
+
+    Actual Storage Usage: {actual_storage_gb:.2f} Gi
+
+    Recommended Storage: {recommended_storage:.2f} Gi
+
+    Current Storage Cost: ${current_storage_cost:.2f}
+
+    Optimized Storage Cost: ${optimized_storage_cost:.2f}
+
+    Expected Saving: ${storage_saving:.2f}
+
+    Estimated Savings: {storage_saving_percent:.2f}%
+    """
+
+
     # 4. الحفظ في الـ JSON (تأكدي من تمرير alert_text هنا)
     #save_log("online-store", actual_mem_gb, recommended_mem, current_replicas, recommended_replicas, mem_cost, alert_text)
 
@@ -235,6 +336,7 @@ def main():
 
 
     # 4. طباعة التقرير الموحد
+    """
     print(f"--- التقرير الموحد ---")
     print(
         f"الريبلكا الحالية : "
@@ -320,6 +422,37 @@ def main():
 #    )
 
     print(
+        f"Current Storage : "
+        f"{current_storage_gb:.2f} Gi"
+    )
+
+    print(
+        f"Storage Usage : "
+        f"{actual_storage_gb:.2f} Gi"
+    )
+
+    print(
+        f"Recommended Storage : "
+        f"{recommended_storage:.2f} Gi"
+    )
+
+    print(
+        f"Storage Current Cost : "
+        f"${current_storage_cost:.2f}"
+    )
+
+    print(
+        f"Storage Optimized Cost : "
+        f"${optimized_storage_cost:.2f}"
+    )
+
+    print(
+        f"Storage Saving : "
+        f"${storage_saving:.2f}"
+    )
+
+
+    print(
         f"Total Cost Impact : "
         f"${total_cost_impact:.2f}"
     )
@@ -330,6 +463,85 @@ def main():
         f"\nتم توليد رسالة التنبيه:\n"
         f"{alert_text}"
     )
+    """
+
+
+    print(f"--- التقرير الموحد ---")
+    print("----------------------")
+    print("\n" + "=" * 70)
+    print("              RESOURCE OPTIMIZATION REPORT")
+    print("=" * 70)
+
+    print(f"Application Name          : online-store")
+    print(f"Current Replicas          : {current_replicas}")
+    print(f"Recommended Replicas      : {recommended_replicas}")
+    print()
+
+    print("-" * 70)
+    print("MEMORY OPTIMIZATION")
+    print("-" * 70)
+
+    print(f"Current Memory Usage      : {actual_mem_gb:.2f} Gi")
+    print(f"Recommended Memory        : {recommended_mem:.2f} Gi")
+    print(f"Current Memory Cost       : ${current_memory_cost:.2f}")
+    print(f"Optimized Memory Cost     : ${optimized_memory_cost:.2f}")
+    print(f"Memory Saving             : ${memory_saving:.2f}")
+    print(f"Memory Saving Percentage  : {memory_saving_percent:.2f}%")
+    print()
+
+    print("-" * 70)
+    print("CPU OPTIMIZATION")
+    print("-" * 70)
+
+    print(f"CPU Usage                 : {actual_cpu:.2f}m")
+    print(f"Current CPU Request       : {current_cpu_request:.2f}m")
+    print(f"Recommended CPU Request   : {recommended_cpu:.2f}m")
+    print(f"Current CPU Cost          : ${current_cpu_cost:.2f}")
+    print(f"Optimized CPU Cost        : ${optimized_cpu_cost:.2f}")
+
+    if cpu_saving >= 0:
+        print(f"CPU Saving                : ${cpu_saving:.2f}")
+    else:
+        print(f"Additional CPU Cost       : ${abs(cpu_saving):.2f}")
+
+    print(f"CPU Saving Percentage     : {cpu_saving_percent:.2f}%")
+    print()
+
+    print("-" * 70)
+    print("REPLICA OPTIMIZATION")
+    print("-" * 70)
+
+    print(f"Current Replicas          : {current_replicas}")
+    print(f"Recommended Replicas      : {recommended_replicas}")
+    print(f"Current Replica Cost      : ${current_replica_cost:.2f}")
+    print(f"Optimized Replica Cost    : ${optimized_replica_cost:.2f}")
+    print(f"Replica Saving            : ${replica_saving:.2f}")
+    print(f"Replica Saving Percentage : {replica_saving_percent:.2f}%")
+    print()
+
+    print("-" * 70)
+    print("STORAGE OPTIMIZATION")
+    print("-" * 70)
+
+    print(f"Current Storage Capacity  : {current_storage_gb:.2f} Gi")
+    print(f"Current Storage Usage     : {actual_storage_gb:.2f} Gi")
+    print(f"Recommended Storage       : {recommended_storage:.2f} Gi")
+    print(f"Current Storage Cost      : ${current_storage_cost:.2f}")
+    print(f"Optimized Storage Cost    : ${optimized_storage_cost:.2f}")
+    print(f"Storage Saving            : ${storage_saving:.2f}")
+    print(f"Storage Saving Percentage : {storage_saving_percent:.2f}%")
+    print()
+
+    print("=" * 70)
+    print(f"TOTAL COST IMPACT         : ${total_cost_impact:.2f}")
+    print("=" * 70)
+
+    print("\nGenerated Alert Message:")
+    print("-" * 70)
+    print(alert_text)
+    print("=" * 70)
+
+
 
     # Save ONE log entry
     save_log(
@@ -341,8 +553,10 @@ def main():
         cost_diff=total_cost_impact,
         message={
             "memory_alert": alert_text,
+	    "memory_report": memory_message,
             "cpu_alert": cpu_message,
 	    "replica_alert": replica_message,
+       	    "storage_alert": storage_message,
         },
        # actual_cpu=actual_cpu,
         current_cpu_request=current_cpu_request,
@@ -354,6 +568,11 @@ def main():
         optimized_replica_cost=optimized_replica_cost,
         replica_saving=replica_saving,
         replica_saving_percent=replica_saving_percent,
+
+	current_storage=current_storage_gb,
+        recommended_storage=recommended_storage,
+        storage_saving=storage_saving
+
     )
 
 

@@ -1,0 +1,28 @@
+---
+- name: Storage Optimization Playbook
+  hosts: localhost
+  become: yes
+
+  tasks:
+
+    - name: Get current PVC size
+      command:
+        kubectl get pvc online-store \
+        -o jsonpath='{.spec.resources.requests.storage}'
+      register: pvc_size
+
+    - name: Show current storage
+      debug:
+        msg:
+          Current PVC size: "{{ pvc_size.stdout }}"
+
+    - name: Patch PVC storage size
+      command:
+        kubectl patch pvc online-store \
+        -p '{"spec":{"resources":{"requests":{"storage":"{{ new_storage }}Gi"}}}}'
+      when:
+        - new_storage is defined
+
+    - name: Restart application pods
+      command:
+        kubectl rollout restart deployment online-store

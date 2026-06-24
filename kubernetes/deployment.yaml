@@ -18,6 +18,9 @@ spec:
       - name: online-store
         image: online-store-app:latest
         imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: storage
+          mountPath: /data
         ports:
         - containerPort: 8000
         resources:
@@ -39,3 +42,7 @@ spec:
             port: 8000
           initialDelaySeconds: 20
           periodSeconds: 20
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: online-store
