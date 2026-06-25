@@ -1,0 +1,21 @@
+- name: Update Service Storage
+  hosts: localhost
+  connection: local
+  vars:
+    pvc_name: "online-store-pvc" # تأكدي من اسم الـ PVC
+    namespace: "default"
+    # القيمة تُمرر من n8n مثلاً: "10Gi"
+    new_storage: "10Gi"
+
+  tasks:
+    - name: Patch PVC Storage
+      kubernetes.core.k8s:
+        state: patched
+        kind: PersistentVolumeClaim
+        name: "{{ pvc_name }}"
+        namespace: "{{ namespace }}"
+        definition:
+          spec:
+            resources:
+              requests:
+                storage: "{{ new_storage }}"

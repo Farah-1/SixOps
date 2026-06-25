@@ -1,0 +1,28 @@
+---
+- name: Update Service Memory
+  hosts: localhost
+  connection: local
+  vars:
+    service_name: "online-store"
+    namespace: "default"
+    # هذه القيمة سيتم تمريرها من n8n
+    new_memory: "0.5Gi"
+
+  tasks:
+    - name: Patch Deployment Memory
+      kubernetes.core.k8s:
+        state: patched
+        kind: Deployment
+        name: "{{ service_name }}"
+        namespace: "{{ namespace }}"
+        definition:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: "{{ service_name }}"
+                    resources:
+                      limits:
+                        memory: "{{ new_memory }}"
+                      requests:
+                        memory: "{{ new_memory }}"

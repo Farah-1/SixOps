@@ -1,0 +1,20 @@
+---
+- name: Update Service Replicas
+  hosts: localhost
+  connection: local
+  vars:
+    service_name: "online-store"
+    namespace: "default"
+    # هذه القيمة سيتم تمريرها من n8n
+    new_replicas: 4
+
+  tasks:
+    - name: Patch Deployment Replicas
+      kubernetes.core.k8s:
+        state: patched
+        kind: Deployment
+        name: "{{ service_name }}"
+        namespace: "{{ namespace }}"
+        definition:
+          spec:
+            replicas: "{{ new_replicas | int }}"

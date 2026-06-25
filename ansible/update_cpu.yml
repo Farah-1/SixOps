@@ -1,0 +1,27 @@
+- name: Update Service CPU
+  hosts: localhost
+  connection: local
+  vars:
+    service_name: "online-store"
+    namespace: "default"
+    # القيمة تُمرر من n8n مثلاً: "500m"
+    new_cpu: "500m"
+
+  tasks:
+    - name: Patch Deployment CPU
+      kubernetes.core.k8s:
+        state: patched
+        kind: Deployment
+        name: "{{ service_name }}"
+        namespace: "{{ namespace }}"
+        definition:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: "{{ service_name }}"
+                    resources:
+                      limits:
+                        cpu: "{{ new_cpu }}"
+                      requests:
+                        cpu: "{{ new_cpu }}"
