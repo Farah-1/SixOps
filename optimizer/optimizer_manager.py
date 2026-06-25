@@ -10,6 +10,9 @@ from optimizer.replica_cost_recommender import (
 from optimizer.storage_optimizer import analyze_storage_and_cost
 from rag.rag_engine import generate_alert_message
 from optimizer.cpu_optimizer import analyze_cpu_and_cost
+from optimizer.idle_resource_optimizer import (
+    analyze_idle_resources
+)
 
 
 def get_prometheus_data(query):
@@ -117,13 +120,13 @@ def get_storage_metrics():
     )
 
 
-def calculate_total_cost_impact(memory_cost, cpu_cost, replica_saving, storage_saving):
+def calculate_total_cost_impact(memory_cost, cpu_cost, replica_saving, storage_saving, idle_saving):
     """
     Returns the total cost impact from memory and CPU optimizations.
     Positive value = savings.
     Negative value = additional cost.
     """
-    return memory_cost + cpu_cost + replica_saving + storage_saving
+    return memory_cost + cpu_cost + replica_saving + storage_saving + idle_saving
 
 def get_current_cpu_request_from_k8s():
     try:
@@ -228,12 +231,23 @@ def main():
     )
 
 
+    (
+        idle_nodes,
+        unused_services,
+        unused_apis,
+        idle_saving
+    ) = analyze_idle_resources()
+
+
+
+
  # mem_cost
     total_cost_impact = (calculate_total_cost_impact(
 	memory_saving,
         cpu_saving,
 	replica_saving,
-	storage_saving
+	storage_saving,
+	idle_saving
     ))
 
     # 6. Build alert messages FIRST (fix critical bug)
@@ -326,6 +340,19 @@ def main():
     Expected Saving: ${storage_saving:.2f}
 
     Estimated Savings: {storage_saving_percent:.2f}%
+    """
+
+
+    idle_message = f"""
+    Idle Resource Optimization
+
+    Idle Nodes: {idle_nodes}
+
+    Unused Services: {unused_services}
+
+    Unused APIs: {unused_apis}
+
+    Potential Saving: ${idle_saving:.2f}
     """
 
 
@@ -532,6 +559,24 @@ def main():
     print(f"Storage Saving Percentage : {storage_saving_percent:.2f}%")
     print()
 
+    print("-" * 70)
+    print("IDLE RESOURCE OPTIMIZATION")
+    print("-" * 70)
+    print(
+        f"Idle Nodes : "f"{idle_nodes}"
+    )
+    print(
+        f"Unused Services : " f"{unused_services}"
+    )
+    print(
+        f"Unused APIs : " f"{unused_apis}"
+    )
+    print(
+        f"Potential Saving : "f"${idle_saving:.2f}"
+    )
+    print()
+
+
     print("=" * 70)
     print(f"TOTAL COST IMPACT         : ${total_cost_impact:.2f}")
     print("=" * 70)
@@ -557,6 +602,7 @@ def main():
             "cpu_alert": cpu_message,
 	    "replica_alert": replica_message,
        	    "storage_alert": storage_message,
+	    "idle_alert": idle_message,
         },
        # actual_cpu=actual_cpu,
         current_cpu_request=current_cpu_request,
@@ -571,7 +617,12 @@ def main():
 
 	current_storage=current_storage_gb,
         recommended_storage=recommended_storage,
-        storage_saving=storage_saving
+        storage_saving=storage_saving,
+
+	idle_nodes=idle_nodes,
+	unused_services=unused_services,
+	unused_apis=unused_apis,
+	idle_saving=idle_saving
 
     )
 

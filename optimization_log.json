@@ -416,3 +416,44 @@
         "storage_alert": "\n    Storage Optimization Recommendation\n\n    Current Storage: 10.00 Gi\n\n    Actual Storage Usage: 0.20 Gi\n\n    Recommended Storage: 5.00 Gi\n\n    Current Storage Cost: $1.00\n\n    Optimized Storage Cost: $0.50\n\n    Expected Saving: $0.50\n\n    Estimated Savings: 50.00%\n    "
     }
 }
+{
+    "timestamp": "2026-06-25T15:23:17.987227",
+    "service_name": "online-store",
+    "memory": {
+        "actual": 0.0771484375,
+        "recommended": 0.5
+    },
+    "replicas": {
+        "current": 2,
+        "recommended": 2,
+        "current_cost": 1.15,
+        "optimized_cost": 1.15,
+        "saving": 0.0,
+        "saving_percent": 0.0
+    },
+    "cpu": {
+        "current": 100.0,
+        "recommended": 50,
+        "saving": 0.125
+    },
+    "storage": {
+        "current": 10.0,
+        "recommended": 5,
+        "saving": 0.5
+    },
+    "idle_resources": {
+        "idle_nodes": 0,
+        "unused_services": 2,
+        "unused_apis": 4,
+        "saving": 0.14
+    },
+    "cost_impact": 3.0400000000000005,
+    "alert_message": {
+        "memory_alert": "❌ خطأ API KEY: تحقق من Google API Key",
+        "memory_report": "\n    Memory Optimization Recommendation\n\n    Current Memory Usage: 0.08 Gi\n\n    Recommended Memory: 0.50 Gi\n\n    Current Memory Cost: $2.85\n\n    Optimized Memory Cost: $0.57\n\n    Expected Saving: $2.28\n\n    Estimated Savings: 79.82%\n    ",
+        "cpu_alert": "\n    CPU Optimization Recommendation\n\n    Current CPU Request: 100.00m\n   \n    Recommended CPU: 50.00m\n    Current CPU Cost: $0.25\n\n    Optimized CPU Cost: $0.12\n\n    Expected Saving: $0.12\n\n    Estimated Savings: 50.00%\n    ",
+        "replica_alert": "\n    Replica Optimization Recommendation\n\n    Current Replicas: 2\n\n    Recommended Replicas: 2\n\n    Current Replica Cost:\n    $1.15\n\n    Optimized Replica Cost:\n    $1.15\n\n    Expected Saving:\n    $0.00\n\n    Estimated Savings:\n    0.00%\n    ",
+        "storage_alert": "\n    Storage Optimization Recommendation\n\n    Current Storage: 10.00 Gi\n\n    Actual Storage Usage: 0.20 Gi\n\n    Recommended Storage: 5.00 Gi\n\n    Current Storage Cost: $1.00\n\n    Optimized Storage Cost: $0.50\n\n    Expected Saving: $0.50\n\n    Estimated Savings: 50.00%\n    ",
+        "idle_alert": "\n    Idle Resource Optimization\n\n    Idle Nodes: 0\n\n    Unused Services: 2\n\n    Unused APIs: 4\n\n    Potential Saving: $0.14\n    "
+    }
+}

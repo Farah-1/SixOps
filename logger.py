@@ -33,7 +33,11 @@ def save_log(
         replica_saving_percent=0,
         current_storage=0,
         recommended_storage=0,
-        storage_saving=0
+        storage_saving=0,
+	idle_nodes=0,
+	unused_services=0,
+	unused_apis=0,
+	idle_saving=0
 ):
     log_entry = {
         "timestamp": datetime.now().isoformat(),
@@ -65,6 +69,13 @@ def save_log(
             "recommended": recommended_storage,
             "saving": storage_saving
         },
+
+	"idle_resources": {
+      	    "idle_nodes": idle_nodes,
+   	    "unused_services": unused_services,
+  	    "unused_apis": unused_apis,
+       	    "saving": idle_saving
+	},
 
         "cost_impact": cost_diff,
         "alert_message": message
