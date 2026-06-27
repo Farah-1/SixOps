@@ -19,8 +19,8 @@
 تشغيل السيرفر المسؤول عن استقبال طلبات التعديل:
 ```bash
 python3 api_server.py
-
-2. تشغيل اتصال Prometheus
+```
+###2. تشغيل اتصال Prometheus
 للسماح للنظام بقراءة بيانات الأداء:
 
 kubectl port-forward svc/prometheus-server 46691:80 -n monitoring
