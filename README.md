@@ -20,31 +20,31 @@
 ```bash
 python3 api_server.py
 ```
-###2. تشغيل اتصال Prometheus
+### 2. تشغيل اتصال Prometheus
 للسماح للنظام بقراءة بيانات الأداء:
-
+```bash
 kubectl port-forward svc/prometheus-server 46691:80 -n monitoring
-
-3. إعداد وتشغيل Ngrok
+```
+### 3. إعداد وتشغيل Ngrok
 بعد تحميل ngrok وتثبيته، قومي بتشغيل الـ Tunnel على منفذ n8n:
-
+```bash
 # تسجيل الـ Token (مرة واحدة فقط)
 ngrok config add-authtoken <YOUR_AUTH_TOKEN>
 
 # تشغيل الـ Tunnel
 ngrok http 5678
-
-4. ضبط البيئة وتشغيل n8n
+```
+### 4. ضبط البيئة وتشغيل n8n
 في terminal جديدة، قومي بضبط رابط الـ Webhook ثم شغلي n8n:
-
+```bash
 # ضعي الرابط الذي نسختِه من ngrok هنا
 export WEBHOOK_URL=https://<YOUR_NGROK_URL>
 
 # تشغيل n8n باستخدام npx
 npx n8n start
+```
 
-
-5. الوصول للنظام
+### 5. الوصول للنظام
 بعد تشغيل n8n، يمكنكِ الدخول إلى لوحة التحكم من المتصفح عبر الرابط:
 👉 http://localhost:5678
 
