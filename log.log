@@ -1,0 +1,18 @@
+2026-06-27 05:02:40,746 [+] pydumpck is a multi-threads tool for decompile exe,elf,pyz,pyc packed by python which is base on pycdc and uncompyle6.sometimes its py-file result not exactly right ,maybe could use uncompyle6.
+--------------------
+pydumpck initilizing with 1.20.1 :pyinstaller_dump.py:120-20  /home/farah/.local/lib/python3.12/site-packages/pydumpck/pyinstaller_dump.py on(pyinstaller_dump.run) at 10075@MainThread  
+2026-06-27 05:02:40,747 [*] plugins loaded with ['pycdc'] :__init__.py:165-10  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.load_plugins) at 10075@MainThread  
+2026-06-27 05:02:40,747 [*] target file input:optimizer/__pycache__/cpu_optimizer.cpython-312.pyc
+to:output_3252827 :__init__.py:206-10  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 10075@MainThread  
+2026-06-27 05:02:40,747 [*] start dump target file. type:pyc :__init__.py:213-10  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 10075@MainThread  
+2026-06-27 05:02:43,761 [!] Exception on decompile bytecode file:output_3252827/cpu_optimizer.cpython-312.pyc,with error:[!] invalid pyc-struct data :__init__.py:45-30  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_package/package_struct/__init__.py on(__init__.decompile_pyc) at 10075@MainThread  
+2026-06-27 05:02:43,761 [+] completed,cost 3015ms with result:pyc file handled:output_3252827/cpu_optimizer.cpython-312.pyc :__init__.py:177-20  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.statistics_status) at 10075@MainThread  
+2026-06-27 05:28:22,430 [+] pydumpck is a multi-threads tool for decompile exe,elf,pyz,pyc packed by python which is base on pycdc and uncompyle6.sometimes its py-file result not exactly right ,maybe could use uncompyle6.
+--------------------
+pydumpck initilizing with 1.20.1 :pyinstaller_dump.py:120-20  /home/farah/.local/lib/python3.12/site-packages/pydumpck/pyinstaller_dump.py on(pyinstaller_dump.run) at 11575@MainThread  
+2026-06-27 05:28:22,432 [*] plugins loaded with ['pycdc'] :__init__.py:165-10  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.load_plugins) at 11575@MainThread  
+2026-06-27 05:28:22,432 [*] target file input:optimizer/__pycache__/cpu_optimizer.cpython-312.pyc
+to:optimizer/ :__init__.py:206-10  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 11575@MainThread  
+2026-06-27 05:28:22,432 [*] start dump target file. type:pyc :__init__.py:213-10  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 11575@MainThread  
+2026-06-27 05:28:25,435 [!] Exception on decompile bytecode file:optimizer//cpu_optimizer.cpython-312.pyc,with error:[!] invalid pyc-struct data :__init__.py:45-30  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_package/package_struct/__init__.py on(__init__.decompile_pyc) at 11575@MainThread  
+2026-06-27 05:28:25,435 [+] completed,cost 3004ms with result:pyc file handled:optimizer//cpu_optimizer.cpython-312.pyc :__init__.py:177-20  /home/farah/.local/lib/python3.12/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.statistics_status) at 11575@MainThread  
