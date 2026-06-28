@@ -1,0 +1,322 @@
+[
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Crypto_Mining",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "high",
+    "confidence": 0.805,
+    "detected": true,
+    "explanation": "AI detected abnormal cloud behavior due to high CPU usage, high memory usage, high disk I/O, high network I/O, crypto mining workload behavior.",
+    "evidence": {
+      "cpu_usage": 95.0,
+      "memory_usage": 80.0,
+      "disk_io": 60.0,
+      "network_io": 40.0,
+      "hour": 14,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.805
+    },
+    "recommendation": {
+      "root_cause": "AI model detected abnormal cloud resource behavior.",
+      "recommendation": "Investigate workload resource usage and possible cost impact.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "medium",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Crypto_Mining",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "high",
+    "confidence": 0.81,
+    "detected": true,
+    "explanation": "AI detected abnormal cloud behavior due to high CPU usage, high disk I/O, high network I/O, crypto mining workload behavior.",
+    "evidence": {
+      "cpu_usage": 90.0,
+      "memory_usage": 70.0,
+      "disk_io": 45.0,
+      "network_io": 35.0,
+      "hour": 18,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.81
+    },
+    "recommendation": {
+      "root_cause": "AI model detected abnormal cloud resource behavior.",
+      "recommendation": "Investigate workload resource usage and possible cost impact.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "medium",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Web_Service",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "normal",
+    "confidence": 0.0,
+    "detected": false,
+    "explanation": "Resource utilization is within the expected operating range.",
+    "evidence": {
+      "cpu_usage": 20.0,
+      "memory_usage": 30.0,
+      "disk_io": 5.0,
+      "network_io": 4.0,
+      "hour": 10,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.0
+    },
+    "recommendation": {
+      "root_cause": "No abnormal cloud resource behavior detected.",
+      "recommendation": "No action required.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "low",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Database_Query",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "normal",
+    "confidence": 0.0,
+    "detected": false,
+    "explanation": "Resource utilization is within the expected operating range.",
+    "evidence": {
+      "cpu_usage": 15.0,
+      "memory_usage": 25.0,
+      "disk_io": 3.0,
+      "network_io": 2.0,
+      "hour": 9,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.0
+    },
+    "recommendation": {
+      "root_cause": "No abnormal cloud resource behavior detected.",
+      "recommendation": "No action required.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "low",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Web_Service",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "normal",
+    "confidence": 0.385,
+    "detected": false,
+    "explanation": "Resource utilization is within the expected operating range.",
+    "evidence": {
+      "cpu_usage": 85.0,
+      "memory_usage": 60.0,
+      "disk_io": 35.0,
+      "network_io": 25.0,
+      "hour": 13,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.385
+    },
+    "recommendation": {
+      "root_cause": "No abnormal cloud resource behavior detected.",
+      "recommendation": "No action required.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "low",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Backup",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "normal",
+    "confidence": 0.0,
+    "detected": false,
+    "explanation": "Resource utilization is within the expected operating range.",
+    "evidence": {
+      "cpu_usage": 12.0,
+      "memory_usage": 20.0,
+      "disk_io": 2.0,
+      "network_io": 1.0,
+      "hour": 3,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.0
+    },
+    "recommendation": {
+      "root_cause": "No abnormal cloud resource behavior detected.",
+      "recommendation": "No action required.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "low",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Video_Streaming",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "normal",
+    "confidence": 0.005,
+    "detected": false,
+    "explanation": "Resource utilization is within the expected operating range.",
+    "evidence": {
+      "cpu_usage": 75.0,
+      "memory_usage": 65.0,
+      "disk_io": 50.0,
+      "network_io": 30.0,
+      "hour": 20,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.005
+    },
+    "recommendation": {
+      "root_cause": "No abnormal cloud resource behavior detected.",
+      "recommendation": "No action required.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "low",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Database_Query",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "normal",
+    "confidence": 0.0,
+    "detected": false,
+    "explanation": "Resource utilization is within the expected operating range.",
+    "evidence": {
+      "cpu_usage": 30.0,
+      "memory_usage": 40.0,
+      "disk_io": 8.0,
+      "network_io": 5.0,
+      "hour": 11,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.0
+    },
+    "recommendation": {
+      "root_cause": "No abnormal cloud resource behavior detected.",
+      "recommendation": "No action required.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "low",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Crypto_Mining",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "high",
+    "confidence": 0.815,
+    "detected": true,
+    "explanation": "AI detected abnormal cloud behavior due to high CPU usage, high memory usage, high disk I/O, high network I/O, crypto mining workload behavior.",
+    "evidence": {
+      "cpu_usage": 98.0,
+      "memory_usage": 90.0,
+      "disk_io": 65.0,
+      "network_io": 42.0,
+      "hour": 22,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.815
+    },
+    "recommendation": {
+      "root_cause": "AI model detected abnormal cloud resource behavior.",
+      "recommendation": "Investigate workload resource usage and possible cost impact.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "medium",
+      "requires_approval": true
+    }
+  },
+  {
+    "pack_name": "ai_cloud_anomaly_prediction",
+    "service": "Web_Service",
+    "namespace": "ai-inference",
+    "problem_type": "ai_predicted_cloud_anomaly",
+    "severity": "normal",
+    "confidence": 0.0,
+    "detected": false,
+    "explanation": "Resource utilization is within the expected operating range.",
+    "evidence": {
+      "cpu_usage": 25.0,
+      "memory_usage": 35.0,
+      "disk_io": 6.0,
+      "network_io": 4.0,
+      "hour": 8,
+      "day": 15,
+      "day_of_week": 2,
+      "anomaly_probability": 0.0
+    },
+    "recommendation": {
+      "root_cause": "No abnormal cloud resource behavior detected.",
+      "recommendation": "No action required.",
+      "estimated_daily_savings": 0,
+      "automation_candidate": false,
+      "requires_approval": true
+    },
+    "automation": {
+      "can_automate": false,
+      "risk_level": "low",
+      "requires_approval": true
+    }
+  }
+]
