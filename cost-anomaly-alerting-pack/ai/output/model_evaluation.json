@@ -1,0 +1,106 @@
+{
+  "model_name": "RandomForestClassifier",
+  "validation_strategy": "time_based_split",
+  "dataset_rows": 14400,
+  "features": [
+    "CPU_Usage",
+    "Memory_Usage",
+    "Disk_IO",
+    "Network_IO",
+    "Workload_Type",
+    "hour",
+    "day",
+    "day_of_week"
+  ],
+  "target": "Anomaly_Label",
+  "accuracy": 1.0,
+  "classification_report": {
+    "0": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2605.0
+    },
+    "1": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 275.0
+    },
+    "accuracy": 1.0,
+    "macro avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2880.0
+    },
+    "weighted avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2880.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      2605,
+      0
+    ],
+    [
+      0,
+      275
+    ]
+  ],
+  "average_anomaly_probability": 0.09594047466569741,
+  "feature_importance": [
+    {
+      "feature": "CPU_Usage",
+      "importance": 0.4612151153285259
+    },
+    {
+      "feature": "Workload_Type_Crypto_Mining",
+      "importance": 0.37307989028990735
+    },
+    {
+      "feature": "Workload_Type_Database_Query",
+      "importance": 0.054889888024300726
+    },
+    {
+      "feature": "Workload_Type_Web_Service",
+      "importance": 0.05298750506577071
+    },
+    {
+      "feature": "Network_IO",
+      "importance": 0.02043751662691726
+    },
+    {
+      "feature": "Workload_Type_Video_Streaming",
+      "importance": 0.019862368263419906
+    },
+    {
+      "feature": "Workload_Type_Backup",
+      "importance": 0.00832059954767009
+    },
+    {
+      "feature": "Memory_Usage",
+      "importance": 0.006168315486159079
+    },
+    {
+      "feature": "Disk_IO",
+      "importance": 0.0028803850978640776
+    },
+    {
+      "feature": "hour",
+      "importance": 0.00015841626946493602
+    },
+    {
+      "feature": "day",
+      "importance": 0.0
+    },
+    {
+      "feature": "day_of_week",
+      "importance": 0.0
+    }
+  ],
+  "note": "High accuracy is expected because the dataset contains clearly separable cloud anomaly patterns. Feature importance is used to verify that the model is relying on meaningful infrastructure signals."
+}
