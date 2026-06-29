@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: online-store
+  labels:
+    app: online-store
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: online-store
+  template:
+    metadata:
+      labels:
+        app: online-store
+    spec:
+      containers:
+      - name: online-store
+        image: online-store-app:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: storage
+          mountPath: /data
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 20
+          periodSeconds: 20
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: online-store
