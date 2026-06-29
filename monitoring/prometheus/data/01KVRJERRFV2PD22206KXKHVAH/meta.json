@@ -1,0 +1,17 @@
+{
+	"ulid": "01KVRJERRFV2PD22206KXKHVAH",
+	"minTime": 1782124179430,
+	"maxTime": 1782129600000,
+	"stats": {
+		"numSamples": 844063,
+		"numSeries": 1527,
+		"numChunks": 6627
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01KVRJERRFV2PD22206KXKHVAH"
+		]
+	},
+	"version": 1
+}
